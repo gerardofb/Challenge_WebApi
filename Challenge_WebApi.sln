@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenge_WebApi", "Challenge_WebApi\Challenge_WebApi.csproj", "{FC7343C0-6A8D-44E9-A84C-895B12BF0559}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenge_WebApi", "Challenge_WebApi\Challenge_WebApi.csproj", "{FC7343C0-6A8D-44E9-A84C-895B12BF0559}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{9312AC95-FAA6-4E27-9F8F-B00966BA6457}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{9312AC95-FAA6-4E27-9F8F-B00966BA6457}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestChallengeWebApi", "TestChallengeWebApi\TestChallengeWebApi.csproj", "{F20E8EC4-617E-47E0-A070-59A0C27A134D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestChallengeWebApi", "TestChallengeWebApi\TestChallengeWebApi.csproj", "{F20E8EC4-617E-47E0-A070-59A0C27A134D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{6E47E29D-0B0B-4353-8A2D-96E3820EB9CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{6E47E29D-0B0B-4353-8A2D-96E3820EB9CB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleSeedChallenge_TL", "ConsoleSeedChallenge_TL\ConsoleSeedChallenge_TL.csproj", "{57A746AA-7DDF-44E2-BC33-522540E97692}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queries", "Queries\Queries.csproj", "{E018C278-28E8-40EA-8DEB-871A1850E19C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "Queries\Queries.csproj", "{E018C278-28E8-40EA-8DEB-871A1850E19C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
