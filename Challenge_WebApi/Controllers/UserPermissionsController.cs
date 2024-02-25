@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
-using Repository.Implementation;
+using Repository.UnitOfWork;
 using Queries.Interfaces;
 using Infrastructure.Models;
 using Infrastructure.Contexts;
@@ -14,19 +14,13 @@ namespace Challenge_WebApi.Controllers
     [ApiController]
     public class UserPermissionsController : ControllerBase
     {
-        private IRepositoryEmployee repositoryEmployee;
-        private IRepositoryPermissionsEmployee repositoryPermissions;
-        private IPermissionTypeRepository repositoryPermissionType;
+        private UnitOfWorkPermissions unitOfWork;
         private IQueryPermissions queryPermissions;
         private ChallengeContext context;
-        public UserPermissionsController(ChallengeContext contexto, IRepositoryEmployee repositoryemp,
-            IRepositoryPermissionsEmployee repositoryperm,
-            IPermissionTypeRepository repositorypermtype,
+        public UserPermissionsController(ChallengeContext contexto,
             IQueryPermissions queryPerms)
         {
-            repositoryEmployee = repositoryemp;
-            repositoryPermissions = repositoryperm;
-            repositoryPermissionType = repositorypermtype;
+            unitOfWork = new UnitOfWorkPermissions(contexto);
             queryPermissions = queryPerms;
             context = contexto;
         }
@@ -123,8 +117,8 @@ namespace Challenge_WebApi.Controllers
                             {
                                 modifiedPermission.CreatedDate = DateTime.UtcNow;
                                 modifiedPermission.Name = newPermissions.NewPermission;
-                                repositoryPermissionType.UpdatePermissionType<PermissionType>(modifiedPermission);
-                                repositoryPermissionType.Save();
+                                unitOfWork.PermissionTypeRepository.Update(modifiedPermission);
+                                unitOfWork.Save();
                                 transaction.Commit();
                             }
                             catch (Exception ex)
@@ -156,10 +150,10 @@ namespace Challenge_WebApi.Controllers
                 {
                     Employee employee = queryPermissions.Get(new Employee { Id = id });
                     PermissionType permType = new PermissionType() { Name = permissionValue, CreatedDate = DateTime.UtcNow };
-                    repositoryPermissionType.InsertPermissionType<PermissionType>(permType);
-                    repositoryPermissionType.Save();
-                    repositoryPermissions.InsertPermission<PermissionsEmployee>(new PermissionsEmployee { Employees = new List<Employee>() { employee }, Guid = Guid.NewGuid(), LastUpdated = DateTime.UtcNow, PermissionTypes = permType });
-                    repositoryPermissions.Save();
+                    unitOfWork.PermissionTypeRepository.Insert(permType);
+                    unitOfWork.Save();
+                    unitOfWork.PermissionRepository.Insert(new PermissionsEmployee { Employees = new List<Employee>() { employee }, Guid = Guid.NewGuid(), LastUpdated = DateTime.UtcNow, PermissionTypes = permType });
+                    unitOfWork.Save();
                     transaction.Commit();
                     return Ok();
                 }

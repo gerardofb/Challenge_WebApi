@@ -10,53 +10,16 @@ using Infrastructure.Models;
 
 namespace Repository.Implementation
 {
-    public class RepositoryPermission : IRepositoryPermissionsEmployee
+    public class RepositoryPermission<TEntity> : GenericRepository<PermissionsEmployee>
     {
-        private bool disposed = false;
-        private ChallengeContext context;
-        public RepositoryPermission(ChallengeContext context)
+        public RepositoryPermission(ChallengeContext contexto) : base(contexto)
         {
-            this.context = context;
         }
-        protected virtual void Dispose(bool disposing)
+        public override void Insert(PermissionsEmployee permission)
         {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        public void InsertPermission<TPermission>(PermissionsEmployee permission) where TPermission : class
-        {
-            if(!context.Permissions.Where(d=> d.Employees.Any(r=> r == permission.Employees[0])).Select(a=> a.PermissionTypes).Any(d=> d.Name == permission.PermissionTypes.Name))
-            context.Permissions.Add(permission);
+            if(!set.Where(d=> d.Employees.Any(r=> r == permission.Employees[0])).Select(a=> a.PermissionTypes).Any(d=> d.Name == permission.PermissionTypes.Name))
+            set.Add(permission);
             else throw new System.NotImplementedException();
-        }
-
-        public void DeletePermission<TPermission>(PermissionsEmployee permission) where TPermission : class
-        {
-            PermissionsEmployee deleted = context.Permissions.Find(permission.Id);
-            context.Permissions.Remove(deleted);
-        }
-
-        public void UpdatePermission<TPermission>(PermissionsEmployee permission) where TPermission : class
-        {
-            context.Entry(permission).State = EntityState.Modified;
-        }
-
-        public void Save()
-        {
-            context.SaveChanges();
         }
     }
 }

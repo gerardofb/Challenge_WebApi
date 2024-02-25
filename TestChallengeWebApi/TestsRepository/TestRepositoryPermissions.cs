@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
-using Repository.Interfaces;
+using Repository.Implementation;
+using Repository.UnitOfWork;
 using Infrastructure.Contexts;
 using Infrastructure.Models;
 using System.Collections.Generic;
@@ -10,19 +11,21 @@ namespace TestChallengeWebApi.TestsRepository
     public class TestRepositoryPermissions
     {
         private ChallengeContext context;
-        private IRepositoryPermissionsEmployee repository;
+        private RepositoryPermission<PermissionsEmployee> repository;
+        private UnitOfWorkPermissions unitOfWork;
         [SetUp]
         public void Setup()
         {
             context = new FactoryDbContext.ChallengeContextFactory().CreateDbContext(new string[] { });
-            repository = new Repository.Implementation.RepositoryPermission(context);
+            unitOfWork = new UnitOfWorkPermissions(context);
+            repository = (RepositoryPermission<PermissionsEmployee>)unitOfWork.PermissionRepository;
         }
 
         [Test]
         public void TestInsertPermission()
         {
             PermissionsEmployee permission = new PermissionsEmployee() { PermissionTypes = new PermissionType() { Name = "Superusuario" }, Employees = new List<Employee> { new Employee { Name = "Nuevo usuario" } } };
-            repository.InsertPermission<PermissionsEmployee>(permission);
+            repository.Insert(permission);
             Assert.IsTrue(context.Permissions.Local.Contains(permission));
         }
     }
