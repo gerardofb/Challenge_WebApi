@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ChallengeContext))]
-    partial class ChallengeContextModelSnapshot : ModelSnapshot
+    [Migration("20240225032841_Correccion-Modelo")]
+    partial class CorreccionModelo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,21 +39,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("EmployeePermissionsEmployee");
                 });
 
-            modelBuilder.Entity("EmployeeWorkArea", b =>
-                {
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkAreaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmployeeId", "WorkAreaId");
-
-                    b.HasIndex("WorkAreaId");
-
-                    b.ToTable("EmployeeWorkArea");
-                });
-
             modelBuilder.Entity("Infrastructure.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -69,7 +56,13 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("WorkAreaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkAreaId")
+                        .IsUnique();
 
                     b.ToTable("Employees");
                 });
@@ -149,19 +142,15 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EmployeeWorkArea", b =>
+            modelBuilder.Entity("Infrastructure.Models.Employee", b =>
                 {
-                    b.HasOne("Infrastructure.Models.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
+                    b.HasOne("Infrastructure.Models.WorkArea", "WorkArea")
+                        .WithOne("Employee")
+                        .HasForeignKey("Infrastructure.Models.Employee", "WorkAreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Models.WorkArea", null)
-                        .WithMany()
-                        .HasForeignKey("WorkAreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("WorkArea");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.PermissionsEmployee", b =>
@@ -178,6 +167,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Infrastructure.Models.PermissionType", b =>
                 {
                     b.Navigation("PermisssionsEmployees");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.WorkArea", b =>
+                {
+                    b.Navigation("Employee");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,6 +10,6 @@ namespace Infrastructure.Models
     { 
         public int Id { get; set; }
         public string? AreaName { get; set; }
-        public Employee? Employee { get; set; }
+        public virtual List<Employee>? Employee { get; set; }
     }
 }

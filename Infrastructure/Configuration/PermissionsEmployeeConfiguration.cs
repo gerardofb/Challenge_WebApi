@@ -11,8 +11,7 @@ namespace Infrastructure.Configuration
         {
             builder.HasKey(e => e.Id);
             builder.HasIndex(e => new { e.Guid, e.LastUpdated });
-            builder.HasMany<PermissionType>().WithMany(a=> a.PermisssionsEmployees);
-            builder.HasOne<Employee>().WithOne(a=> a.PermissionEmployees);
+            builder.HasOne(a=> a.PermissionTypes).WithOne(b=> b.PermisssionsEmployees);
             builder.Property(e=> e.LastUpdated).HasDefaultValue(DateTime.UtcNow);
             builder.Property(e=> e.Guid).HasDefaultValue(Guid.NewGuid());
             builder.Property(e=> e.PermissionTypes).IsRequired();

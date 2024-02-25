@@ -11,8 +11,7 @@ namespace Infrastructure.Models
         public int Id { get; set; }
         public string? Name { get; set; }
         public DateTime CreatedDate { get; set; }
-        public virtual IEnumerable<Employee>? Employees { get; set; }
-        public virtual IEnumerable<PermissionsEmployee>? PermisssionsEmployees { get; set; }
+        public virtual PermissionsEmployee? PermisssionsEmployees { get; set; }
 
     }
 }

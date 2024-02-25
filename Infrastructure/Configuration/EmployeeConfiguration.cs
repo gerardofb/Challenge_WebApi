@@ -9,6 +9,8 @@ namespace Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.HasKey(b => b.Id);
+            builder.HasMany(b => b.PermissionEmployees).WithMany(a => a.Employees);
+            builder.HasMany(a => a.WorkArea).WithMany(b => b.Employee);
             builder.Property(b => b.Name).HasMaxLength(100).IsRequired().IsUnicode(true);
             builder.Property(b => b.LastName).HasMaxLength(150).IsUnicode(true);
             builder.Property(b => b.LastUpdated).HasDefaultValue(DateTime.UtcNow);
