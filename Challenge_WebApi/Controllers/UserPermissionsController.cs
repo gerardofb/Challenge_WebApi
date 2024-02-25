@@ -60,14 +60,14 @@ namespace Challenge_WebApi.Controllers
         }
 
         // GET api/<ChallengeController>/5
-        [HttpGet("GetUser/{name:alpha}")]
+        [HttpGet("GetUser/{name}")]
         public List<ViewModelUser> GetUser(string name)
         {
             List<Employee> employees = null;
             List<ViewModelUser> users = null;
             try
             {
-                employees = queryPermissions.Get(name);
+                employees = queryPermissions.Get(Uri.UnescapeDataString(name));
                 users = new List<ViewModelUser>();
                 if (employees != null)
                 {
@@ -92,7 +92,7 @@ namespace Challenge_WebApi.Controllers
 
         // POST api/<ChallengeController>
         [HttpPost("ModifyPermission/{id}")]
-        public StatusCodeResult Post(int id, [FromBody] ViewModelChangePermission newPermissions)
+        public ObjectResult Post(int id, [FromBody] ViewModelChangePermission newPermissions)
         {
             try
             {
@@ -115,28 +115,32 @@ namespace Challenge_WebApi.Controllers
                         {
                             try
                             {
-                                modifiedPermission.CreatedDate = DateTime.UtcNow;
-                                modifiedPermission.Name = newPermissions.NewPermission;
-                                unitOfWork.PermissionTypeRepository.Update(modifiedPermission);
-                                unitOfWork.Save();
-                                transaction.Commit();
+                                if (ModelState.IsValid)
+                                {
+                                    modifiedPermission.CreatedDate = DateTime.UtcNow;
+                                    modifiedPermission.Name = newPermissions.NewPermission.Trim();
+                                    unitOfWork.PermissionTypeRepository.Update(modifiedPermission);
+                                    unitOfWork.Save();
+                                    transaction.Commit();
+                                }
+                                else return BadRequest(String.Join(',',ModelState.Values.Where(a=> a.Errors.Count > 0)));
                             }
                             catch (Exception ex)
                             {
                                 System.Diagnostics.Debug.WriteLine(ex.Message);
                                 transaction.Rollback();
-                                throw ex;
+                                return BadRequest("An unexpected error ocurred");
                             }
                         }
-                        return Ok();
+                        return Ok("Changes commited");
                     }
                     
                 }
-                return NotFound();
+                return NotFound("Could not find a permission to change");
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("An unexpected error ocurred");
             }
         }
 

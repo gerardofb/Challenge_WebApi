@@ -1,10 +1,11 @@
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.Json;
-using Repository.Interfaces;
-using Repository.Implementation;
 using Queries.Implementation;
 using Queries.Interfaces;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -14,7 +15,8 @@ IConfigurationRoot configuration = new ConfigurationBuilder()
 builder.Services.AddDbContext<ChallengeContext>(options =>
 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IQueryPermissions, QueryPermissions>();
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
+builder.Services.AddMvc();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
