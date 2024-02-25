@@ -30,7 +30,18 @@ namespace Queries.Implementation
             GC.SuppressFinalize(this);
         }
 
-        public List<PermissionsEmployee> Get(int employeeId)
+        public List<MaterializedViewPermissions> Get(int employeeId)
+        {
+            List<MaterializedViewPermissions> salida = null;
+            Employee employeefound = context.Employees.Find(employeeId);
+            if (employeefound != null)
+                salida = context.MaterializedViews.Where(a => a.UserName == employeefound.Name && a.LastName == employeefound.LastName).ToList();
+
+            
+            return salida.Count > 0 ? salida : null;
+        }
+
+        public List<PermissionsEmployee> GetPermissionsExplicit(int employeeId)
         {
             var salida = context.Permissions.Where(a => a.Employees.Any(r=> r.Id == employeeId)).ToList();
             salida.ForEach(r => r.PermissionTypes = context.PermissionsTypes.Find(r.PermissionTypeId));

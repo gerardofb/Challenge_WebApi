@@ -10,8 +10,9 @@ namespace Queries.Interfaces
     public interface IQueryPermissions : IDisposable
     {
         public Employee Get(Employee employee);
-        public List<PermissionsEmployee> Get(int employeeId);
+        public List<MaterializedViewPermissions> Get(int employeeId);
         public List<Employee> Get(string NameEmployee);
         public PermissionType Get(PermissionsEmployee permission);
+        public List<PermissionsEmployee> GetPermissionsExplicit(int employeeId);
     }
 }

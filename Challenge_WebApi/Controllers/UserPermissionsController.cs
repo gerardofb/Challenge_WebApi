@@ -36,7 +36,7 @@ namespace Challenge_WebApi.Controllers
         public IEnumerable<ViewModelPermissionsUser> GetPermissions(int id)
         {
             List<ViewModelPermissionsUser> salida = null;
-            List<PermissionsEmployee> permissions = null;
+            List<MaterializedViewPermissions> permissions = null;
             try
             {
                 Employee employee = queryPermissions.Get(new Employee { Id = id });
@@ -44,15 +44,15 @@ namespace Challenge_WebApi.Controllers
                 salida = new List<ViewModelPermissionsUser>();
                 if (permissions != null)
                 {
-                    foreach (PermissionsEmployee permission in permissions)
+                    foreach (MaterializedViewPermissions permission in permissions)
                     {
-                        PermissionType namePermission = queryPermissions.Get(permission);
+                       
                         salida.Add(new ViewModelPermissionsUser
                         {
                             LastUpdated = permission.LastUpdated,
                             UserName = String.Format("{0} {1}", employee.Name, employee.LastName),
                             PermissionGuid = permission.Guid,
-                            PermissionName = namePermission != null ? namePermission.Name : null,
+                            PermissionName = permission.Name,
                             UserId = employee.Id
                         });
                     }
@@ -103,7 +103,7 @@ namespace Challenge_WebApi.Controllers
             try
             {
                 Employee employee = queryPermissions.Get(new Employee { Id = id });
-                List<PermissionsEmployee> permissionschange = queryPermissions.Get(id);
+                List<PermissionsEmployee> permissionschange = queryPermissions.GetPermissionsExplicit(id);
 
                 if (employee != null && permissionschange.Count > 0)
                 {
