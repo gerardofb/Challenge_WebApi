@@ -10,54 +10,57 @@ using Repository.Interfaces;
 
 
 
-    namespace Repository.Implementation
+namespace Repository.Implementation
+{
+    public class RepositoryPermissionType : IPermissionTypeRepository
     {
-        public class RepositoryPermissionType : IPermissionTypeRepository
+        private bool disposed = false;
+        private ChallengeContext context;
+        public RepositoryPermissionType(ChallengeContext context)
         {
-            private bool disposed = false;
-            private ChallengeContext context;
-            public RepositoryPermissionType(ChallengeContext context)
+            this.context = context;
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
             {
-                this.context = context;
-            }
-            protected virtual void Dispose(bool disposing)
-            {
-                if (!this.disposed)
+                if (disposing)
                 {
-                    if (disposing)
-                    {
-                        context.Dispose();
-                    }
+                    context.Dispose();
                 }
-                this.disposed = true;
             }
+            this.disposed = true;
+        }
 
-            public void Dispose()
-            {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-            public void InsertPermissionType<TPermissionType>(PermissionType permissionType) where TPermissionType : class
-            {
-                context.PermissionsTypes.Add(permissionType);
-            }
+        public void InsertPermissionType<TPermissionType>(PermissionType permissionType) where TPermissionType : class
+        {
+            context.PermissionsTypes.Add(permissionType);
+        }
 
-            public void DeletePermissionType<TPermissionType>(PermissionType permissionType) where TPermissionType : class
-            {
-                PermissionType deleted = context.PermissionsTypes.Find(permissionType.Id);
-                context.PermissionsTypes.Remove(deleted);
-            }
+        public void DeletePermissionType<TPermissionType>(PermissionType permissionType) where TPermissionType : class
+        {
+            PermissionType deleted = context.PermissionsTypes.Find(permissionType.Id);
+            context.PermissionsTypes.Remove(deleted);
+        }
 
-            public void UpdatePermissionType<TPermissionType>(PermissionType permissionType) where TPermissionType : class
-            {
+        public void UpdatePermissionType<TPermissionType>(PermissionType permissionType) where TPermissionType : class
+        {
+            PermissionType permissionModified = context.PermissionsTypes.Find(permissionType.Id);
+            if (permissionModified != null)
                 context.Entry(permissionType).State = EntityState.Modified;
-            }
+            else context.Entry(permissionType).State = EntityState.Unchanged;
+        }
 
-            public void Save()
-            {
-                context.SaveChanges();
-            }
+        public void Save()
+        {
+            context.SaveChanges();
         }
     }
+}
 

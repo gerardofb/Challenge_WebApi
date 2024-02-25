@@ -38,7 +38,9 @@ namespace Repository.Implementation
 
         public void InsertPermission<TPermission>(PermissionsEmployee permission) where TPermission : class
         {
+            if(!context.Permissions.Where(d=> d.Employees.Any(r=> r == permission.Employees[0])).Select(a=> a.PermissionTypes).Any(d=> d.Name == permission.PermissionTypes.Name))
             context.Permissions.Add(permission);
+            else throw new System.NotImplementedException();
         }
 
         public void DeletePermission<TPermission>(PermissionsEmployee permission) where TPermission : class

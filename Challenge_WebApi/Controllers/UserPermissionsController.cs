@@ -31,7 +31,7 @@ namespace Challenge_WebApi.Controllers
             context = contexto;
         }
         // GET: api/<ChallengeController>
-        
+
         [HttpGet("GetPermissions/{id}")]
         public IEnumerable<ViewModelPermissionsUser> GetPermissions(int id)
         {
@@ -97,9 +97,53 @@ namespace Challenge_WebApi.Controllers
         }
 
         // POST api/<ChallengeController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("ModifyPermission/{id}")]
+        public StatusCodeResult Post(int id, [FromBody] ViewModelChangePermission newPermissions)
         {
+            try
+            {
+                Employee employee = queryPermissions.Get(new Employee { Id = id });
+                List<PermissionsEmployee> permissionschange = queryPermissions.Get(id);
+
+                if (employee != null && permissionschange.Count > 0)
+                {
+
+                    IEnumerable<string> oldPermissions = from a in permissionschange
+                                                         select a.PermissionTypes != null ?
+                                                         a.PermissionTypes.Name : "";
+                    if (oldPermissions.Any(x=> x == newPermissions.OldPermission))
+                    {
+
+                        PermissionType modifiedPermission = permissionschange.Select(d => d.PermissionTypes)
+                            .First(a => a.Name == newPermissions.OldPermission);
+
+                        using (var transaction = context.Database.BeginTransaction())
+                        {
+                            try
+                            {
+                                modifiedPermission.CreatedDate = DateTime.UtcNow;
+                                modifiedPermission.Name = newPermissions.NewPermission;
+                                repositoryPermissionType.UpdatePermissionType<PermissionType>(modifiedPermission);
+                                repositoryPermissionType.Save();
+                                transaction.Commit();
+                            }
+                            catch (Exception ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine(ex.Message);
+                                transaction.Rollback();
+                                throw ex;
+                            }
+                        }
+                        return Ok();
+                    }
+                    
+                }
+                return NotFound();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT api/<ChallengeController>/5
@@ -110,7 +154,7 @@ namespace Challenge_WebApi.Controllers
             {
                 try
                 {
-                    Employee employee = queryPermissions.Get(new Employee { Id = id});
+                    Employee employee = queryPermissions.Get(new Employee { Id = id });
                     PermissionType permType = new PermissionType() { Name = permissionValue, CreatedDate = DateTime.UtcNow };
                     repositoryPermissionType.InsertPermissionType<PermissionType>(permType);
                     repositoryPermissionType.Save();
@@ -119,7 +163,13 @@ namespace Challenge_WebApi.Controllers
                     transaction.Commit();
                     return Ok();
                 }
-                catch(Exception ex)
+                catch (NotImplementedException ex)
+                {
+                    transaction.Rollback();
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    return NotFound();
+                }
+                catch (Exception ex)
                 {
                     transaction.Rollback();
                     System.Diagnostics.Debug.WriteLine(ex.Message);
