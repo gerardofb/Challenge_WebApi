@@ -16,6 +16,7 @@ options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IRepositoryEmployee, RepositoryEmployee>();
 builder.Services.AddScoped<IRepositoryPermissionsEmployee, RepositoryPermission>();
 builder.Services.AddScoped<IQueryPermissions, QueryPermissions>();
+builder.Services.AddScoped<IPermissionTypeRepository, RepositoryPermissionType>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

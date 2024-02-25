@@ -30,9 +30,11 @@ namespace Queries.Implementation
             GC.SuppressFinalize(this);
         }
 
-        public Employee Get(Employee employee)
+        public List<PermissionsEmployee> Get(int employeeId)
         {
-            return context.Employees.Find(employee.Id);
+            var salida = context.Permissions.Where(a => a.Employees.Any(r=> r.Id == employeeId)).ToList();
+            salida.ForEach(r => r.PermissionTypes = context.PermissionsTypes.Find(r.PermissionTypeId));
+            return salida;
         }
 
         public List<Employee> Get(string NameEmployee)
@@ -41,10 +43,23 @@ namespace Queries.Implementation
             using (context)
             {
                 var salida = context.Employees.Where(a => a.Name == NameEmployee.Trim() || a.LastName == NameEmployee.Trim()).ToList();
-                if (salida != null && salida.Count > 0)
+                if (salida.Count > 0)
+                {
+                    salida.ForEach(r => r.WorkArea = context.WorkAreas.Where(a => a.Employee.Contains(r)).ToList());
                     employees = salida;
+                }
             }
             return employees;
+        }
+
+        Employee IQueryPermissions.Get(Employee employee)
+        {
+            return context.Employees.Find(employee.Id);
+        }
+
+        public PermissionType Get(PermissionsEmployee permission)
+        {
+            return context.PermissionsTypes.Find(permission.PermissionTypeId);
         }
     }
 }
