@@ -35,16 +35,35 @@ namespace Queries.Implementation
             List<MaterializedViewPermissions> salida = null;
             Employee employeefound = context.Employees.Find(employeeId);
             if (employeefound != null)
+            {
                 salida = context.MaterializedViews.Where(a => a.UserName == employeefound.Name && a.LastName == employeefound.LastName).ToList();
-
-            
-            return salida.Count > 0 ? salida : null;
+                if (salida != null && salida.Count == 0)
+                {
+                    salida = null;
+                }
+            }
+            return salida;
         }
 
         public List<PermissionsEmployee> GetPermissionsExplicit(int employeeId)
         {
-            var salida = context.Permissions.Where(a => a.Employees.Any(r=> r.Id == employeeId)).ToList();
-            salida.ForEach(r => r.PermissionTypes = context.PermissionsTypes.Find(r.PermissionTypeId));
+            List<PermissionsEmployee> salida = null;
+            try
+            {
+                salida = context.Permissions.Where(a => a.Employees.Any(r => r.Id == employeeId)).ToList();
+                if (salida.Count > 0)
+                {
+                    salida.ForEach(r => r.PermissionTypes = context.PermissionsTypes.Find(r.PermissionTypeId));
+                }
+                else
+                {
+                    salida = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
             return salida;
         }
 
@@ -53,11 +72,18 @@ namespace Queries.Implementation
             List<Employee> employees = null;
             using (context)
             {
-                var salida = context.Employees.Where(a => a.Name == NameEmployee.Trim() || a.LastName == NameEmployee.Trim()).ToList();
-                if (salida.Count > 0)
+                try
                 {
-                    salida.ForEach(r => r.WorkArea = context.WorkAreas.Where(a => a.Employee.Contains(r)).ToList());
-                    employees = salida;
+                    var salida = context.Employees.Where(a => a.Name == NameEmployee.Trim() || a.LastName == NameEmployee.Trim()).ToList();
+                    if (salida.Count > 0)
+                    {
+                        salida.ForEach(r => r.WorkArea = context.WorkAreas.Where(a => a.Employee.Contains(r)).ToList());
+                        employees = salida;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
             }
             return employees;

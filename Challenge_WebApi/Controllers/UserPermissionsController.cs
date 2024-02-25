@@ -56,7 +56,7 @@ namespace Challenge_WebApi.Controllers
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
-            return salida.Count > 0 ? salida : null;
+            return (salida != null && salida.Count > 0) ? salida : null;
         }
 
         // GET api/<ChallengeController>/5
@@ -148,7 +148,7 @@ namespace Challenge_WebApi.Controllers
             {
                 try
                 {
-                    Employee employee = queryPermissions.Get(new Employee { Id = id });
+                    Employee employee = unitOfWork.EmployeeRepository.GetById(id);
                     PermissionType permType = new PermissionType() { Name = permissionValue, CreatedDate = DateTime.UtcNow };
                     unitOfWork.PermissionTypeRepository.Insert(permType);
                     unitOfWork.Save();
