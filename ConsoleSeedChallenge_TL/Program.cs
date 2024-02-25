@@ -19,16 +19,16 @@ using (var transaction = context.Database.BeginTransaction())
     {
         context.WorkAreas.AddRange(workArea, workArea2, workArea3, workArea4);
         context.SaveChanges();
-        Employee employee = new Employee() { Name = "Gerardo", LastName = "Flores Barrié", WorkArea = new List<WorkArea> { workArea } };
-        Employee employee2 = new Employee() { Name = "Ricardo", LastName = "Rodríguez López", WorkArea = new List<WorkArea> { workArea2 } };
-        Employee employee3 = new Employee() { Name = "Eric", LastName = "Del Valle Hernández", WorkArea = new List<WorkArea> { workArea3 } };
-        Employee employee4 = new Employee() { Name = "Violeta", LastName = "Santos Bahena", WorkArea = new List<WorkArea> { workArea4 } };
-        Employee employee5 = new Employee() { Name = "Eduardo", LastName = "Ramírez Alvarez", WorkArea = new List<WorkArea> { workArea } };
-        Employee employee6 = new Employee() { Name = "Juan Víctor", LastName = "Sánchez Rodríguez", WorkArea = new List<WorkArea> { workArea2 } };
-        Employee employee7 = new Employee() { Name = "Oscar", LastName = "Juárez Flores", WorkArea = new List<WorkArea> { workArea3 } };
-        Employee employee8 = new Employee() { Name = "Jessica", LastName = "Sánchez Fernández", WorkArea = new List<WorkArea>{workArea4} };
-        Employee employee9 = new Employee() { Name = "Fernando", LastName = "Avalos Rodríguez", WorkArea = new List<WorkArea> { workArea } };
-        Employee employee10 = new Employee() { Name = "Antonio", LastName = "Ramírez Rodríguez", WorkArea = new List<WorkArea>{workArea2} };
+        Employee employee = new Employee() { Name = "Gerardo", LastName = "Flores Barrié", WorkArea = new List<WorkArea> { workArea }, LastUpdated = DateTime.UtcNow };
+        Employee employee2 = new Employee() { Name = "Ricardo", LastName = "Rodríguez López", WorkArea = new List<WorkArea> { workArea2 }, LastUpdated = DateTime.UtcNow };
+        Employee employee3 = new Employee() { Name = "Eric", LastName = "Del Valle Hernández", WorkArea = new List<WorkArea> { workArea3 }, LastUpdated = DateTime.UtcNow };
+        Employee employee4 = new Employee() { Name = "Violeta", LastName = "Santos Bahena", WorkArea = new List<WorkArea> { workArea4 }, LastUpdated = DateTime.UtcNow };
+        Employee employee5 = new Employee() { Name = "Eduardo", LastName = "Ramírez Alvarez", WorkArea = new List<WorkArea> { workArea }, LastUpdated = DateTime.UtcNow };
+        Employee employee6 = new Employee() { Name = "Juan Víctor", LastName = "Sánchez Rodríguez", WorkArea = new List<WorkArea> { workArea2 }, LastUpdated = DateTime.UtcNow };
+        Employee employee7 = new Employee() { Name = "Oscar", LastName = "Juárez Flores", WorkArea = new List<WorkArea> { workArea3 }, LastUpdated = DateTime.UtcNow };
+        Employee employee8 = new Employee() { Name = "Jessica", LastName = "Sánchez Fernández", WorkArea = new List<WorkArea>{workArea4}, LastUpdated = DateTime.UtcNow };
+        Employee employee9 = new Employee() { Name = "Fernando", LastName = "Avalos Rodríguez", WorkArea = new List<WorkArea> { workArea }, LastUpdated = DateTime.UtcNow };
+        Employee employee10 = new Employee() { Name = "Antonio", LastName = "Ramírez Rodríguez", WorkArea = new List<WorkArea>{workArea2}, LastUpdated = DateTime.UtcNow };
         repositoryEmployee.InsertEmployee<Employee>(employee);
         repositoryEmployee.InsertEmployee<Employee>(employee2);
         repositoryEmployee.InsertEmployee<Employee>(employee3);

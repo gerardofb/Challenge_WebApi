@@ -13,7 +13,6 @@ namespace Infrastructure.Configuration
             builder.HasMany(a => a.WorkArea).WithMany(b => b.Employee);
             builder.Property(b => b.Name).HasMaxLength(100).IsRequired().IsUnicode(true);
             builder.Property(b => b.LastName).HasMaxLength(150).IsUnicode(true);
-            builder.Property(b => b.LastUpdated).HasDefaultValue(DateTime.UtcNow);
             builder.HasIndex(b => b.LastUpdated);
         }
     }

@@ -11,7 +11,6 @@ namespace Infrastructure.Configuration
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).IsRequired().HasMaxLength(255).IsUnicode(true);
-            builder.Property(x=> x.CreatedDate).HasDefaultValue(DateTime.UtcNow);
         }
     }
 }
