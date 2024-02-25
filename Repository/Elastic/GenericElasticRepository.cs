@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Elastic.Clients.Elasticsearch;
+﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Specialized;
+
+
 namespace Repository.Elastic
 {
     public class GenericElasticRepository<TEntity> where TEntity : class
     {
         internal ElasticsearchClient _elasticsearchClient;
         internal ElasticsearchClientSettings _elasticsearchSettings;
+        internal TEntity _entity;
         public ElasticsearchClient ElasticsearchClient
         {
             get { return _elasticsearchClient; }
@@ -26,17 +22,25 @@ namespace Repository.Elastic
                 new Uri("https://localhost:9200")).CertificateFingerprint(configuration_fingerprint.Value).Authentication(new BasicAuthentication("elastic", configuration_password.Value));
             _elasticsearchClient = new ElasticsearchClient(_elasticsearchSettings);
         }
-        public virtual void InsertPriorPermissions()
+        public virtual async Task<TEntity> InsertPriorPermissions(TEntity priorPermissions)
         {
-            
+            await Task.Delay(10000).ContinueWith((a) =>
+            {
+                _entity =  GetPermissionsOrderedByDateUpdated().FirstOrDefault();
+            });
+            return _entity;
         }
-        public virtual void InsertAfterPermissions()
+        public virtual async Task<TEntity> InsertAfterPermissions(TEntity latePermissions)
         {
-
+            await Task.Delay(10000).ContinueWith((a) =>
+            {
+                _entity = GetPermissionsOrderedByDateUpdated().FirstOrDefault();
+            });
+            return _entity;
         }
         public virtual List<TEntity> GetPermissionsOrderedByDateUpdated()
         {
-            throw new NotImplementedException();
+            return new List<TEntity> { _entity };
         }
     }
 }

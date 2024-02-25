@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Elastic.Clients.Elasticsearch;
-using Elastic.Transport;
-using Microsoft.Extensions.Configuration.Json;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Specialized;
+﻿using Microsoft.Extensions.Configuration;
 using Infrastructure.ElasticViewModels;
 
 namespace Repository.Elastic
