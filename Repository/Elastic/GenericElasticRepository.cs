@@ -1,4 +1,5 @@
 ﻿using Elasticsearch.Net;
+using Infrastructure.ElasticViewModels;
 using Microsoft.Extensions.Configuration;
 using Nest;
 
@@ -22,25 +23,35 @@ namespace Repository.Elastic
             //    new SingleNodeConnectionPool(new Uri("https://localhost:9200"))));
             //_elasticsearchClient = new ElasticClient(_elasticsearchSettings);
         }
-        public virtual async Task<TEntity> InsertPriorPermissions(TEntity priorPermissions)
+        public virtual async Task<TEntity> InsertPriorPermissions(TEntity priorPermission)
         {
-            await Task.Delay(10000).ContinueWith((a) =>
+            IndexResponse? indexResponse = await _elasticsearchClient.IndexAsync<TEntity>(new IndexRequest<TEntity>(priorPermission));
+            if (!indexResponse.IsValid)
             {
-                _entity =  GetPermissionsOrderedByDateUpdated().FirstOrDefault();
-            });
+                return null;
+            }
             return _entity;
         }
-        public virtual async Task<TEntity> InsertAfterPermissions(TEntity latePermissions)
+
+        public virtual async Task<List<TEntity>> InsertBulkPriorPermissions(List<TEntity> priorPermissions, CancellationToken token)
         {
-            await Task.Delay(10000).ContinueWith((a) =>
+            if (Task.Run(() =>
+             {
+                 var indexBulkResponse = _elasticsearchClient.BulkAll<TEntity>(priorPermissions, b => b.
+                 BackOffTime("30s")
+                 .BackOffRetries(4)
+                 .RefreshOnCompleted()
+                 .MaxDegreeOfParallelism(Environment.ProcessorCount)
+                 .Size(30));
+             }).Wait(TimeSpan.FromMinutes(5)))
             {
-                _entity = GetPermissionsOrderedByDateUpdated().FirstOrDefault();
-            });
-            return _entity;
+                return priorPermissions;
+            }
+            return null;
         }
-        public virtual List<TEntity> GetPermissionsOrderedByDateUpdated()
+        public virtual List<TEntity> GetPermissionsOrderedByDateUpdated(string sortField, string dateInitial)
         {
-            return new List<TEntity> { _entity };
+            throw new NotImplementedException();
         }
     }
 }

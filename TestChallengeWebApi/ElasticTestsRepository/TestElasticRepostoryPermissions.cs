@@ -29,5 +29,11 @@ namespace TestChallengeWebApi.ElasticTestsRepository
             var response = repositoryElasticPermissions.ElasticsearchClient?.GetAsync<ViewModelElasticPermissionsUser>(1, idx => idx.Index("my-tweet-index")).Result;
             Assert.IsFalse(response.IsValid);
         }
+        [Test]
+        public void TestGetEmployeePermissions()
+        {
+            List<ViewModelElasticPermissionsUser> salida = repositoryElasticPermissions.GetPermissionsOrderedByDateUpdated("LastUpdated", "25/02/2024 00:00");
+            Assert.IsTrue(salida == null);
+        }
     }
 }
