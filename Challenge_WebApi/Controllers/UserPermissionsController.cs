@@ -6,6 +6,8 @@ using Infrastructure.Models;
 using Infrastructure.Contexts;
 using Challenge_WebApi.ViewModel;
 using Nest;
+using Repository.Elastic;
+using Infrastructure.ElasticViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,14 +20,14 @@ namespace Challenge_WebApi.Controllers
         private UnitOfWorkPermissions unitOfWork;
         private IQueryPermissions queryPermissions;
         private ChallengeContext context;
-        private IElasticClient elasticClient;
+        private ElasticRepositoryPermissions<ViewModelElasticPermissionsUser> elasticRepository;
         public UserPermissionsController(ChallengeContext contexto,
-            IQueryPermissions queryPerms, IElasticClient clientElastic)
+            IQueryPermissions queryPerms, ElasticRepositoryPermissions<ViewModelElasticPermissionsUser> repositorioElastic)
         {
             unitOfWork = new UnitOfWorkPermissions(contexto);
             queryPermissions = queryPerms;
             context = contexto;
-            elasticClient = clientElastic;
+            elasticRepository = repositorioElastic;
         }
         // GET: api/<ChallengeController>
 
@@ -159,8 +161,20 @@ namespace Challenge_WebApi.Controllers
                     PermissionType permType = new PermissionType() { Name = permissionValue, CreatedDate = DateTime.UtcNow };
                     unitOfWork.PermissionTypeRepository.Insert(permType);
                     unitOfWork.Save();
-                    unitOfWork.PermissionRepository.Insert(new PermissionsEmployee { Employees = new List<Employee>() { employee }, Guid = Guid.NewGuid(), LastUpdated = DateTime.UtcNow, PermissionTypes = permType });
+                    PermissionsEmployee newpermission = new PermissionsEmployee { Employees = new List<Employee>() { employee }, Guid = Guid.NewGuid(), LastUpdated = DateTime.UtcNow, PermissionTypes = permType };
+                    unitOfWork.PermissionRepository.Insert(newpermission);
                     unitOfWork.Save();
+                    // GUARDADO DE ENTIDAD EN ELASTIC SEARCH
+                    PermissionsEmployee permission = unitOfWork.PermissionRepository.Get(a=> a.Guid == newpermission.Guid).First();
+                    ViewModelElasticPermissionsUser permissionUserElastic = elasticRepository.InsertPriorPermissions(new ViewModelElasticPermissionsUser
+                    { LastUpdated = permission.LastUpdated, PermissionGuid = permission.Guid, 
+                        PermissionName = permType.Name, UserId = employee.Id, 
+                        UserName = String.Format("{0} {1}", employee.Name, employee.LastName) }).Result;
+                    if(permissionUserElastic == null)
+                    {
+                        throw new Exception("No fue posible guardar en el índice de elastic search");
+                    }
+                    // FINALIZA GUARDADO DE ENTIDAD EN ELASTIC SEARCH
                     transaction.Commit();
                     return Ok();
                 }

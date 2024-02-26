@@ -17,7 +17,7 @@ IConfigurationRoot configuration = new ConfigurationBuilder()
 // Add services to the container.
 
 ElasticRepositoryPermissions<ViewModelElasticPermissionsUser> _elasticSearchRepo = new ElasticRepositoryPermissions<ViewModelElasticPermissionsUser>(configuration); 
-builder.Services.AddSingleton<IElasticClient>(_elasticSearchRepo.ElasticsearchClient);
+builder.Services.AddSingleton<ElasticRepositoryPermissions<ViewModelElasticPermissionsUser>>(_elasticSearchRepo);
 builder.Services.AddDbContext<ChallengeContext>(options =>
 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IQueryPermissions, QueryPermissions>();

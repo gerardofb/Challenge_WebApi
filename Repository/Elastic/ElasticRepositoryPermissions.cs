@@ -9,9 +9,14 @@ namespace Repository.Elastic
     {
         public ElasticRepositoryPermissions(IConfigurationRoot configuration) : base(configuration)
         {
+            IConfigurationSection configuration_fingerprint = configuration.GetSection("FingerprintElastic").GetSection("DefaultNode");
+            IConfigurationSection configuration_password = configuration.GetSection("PasswordElastic");
+
             _connectionSettings = new ConnectionSettings(new SingleNodeConnectionPool(new Uri("https://localhost:9200"))).DefaultIndex("permissionsindex").
                 DefaultMappingFor<ViewModelElasticPermissionsUser>(m=> m.IdProperty("PermissionGuid")
                 );
+
+            _connectionSettings.CertificateFingerprint(configuration_fingerprint.Value).BasicAuthentication("elastic", configuration_password.Value);
             _elasticsearchSettings = new Transport<ConnectionSettings>(_connectionSettings);
             _elasticsearchClient = new ElasticClient(_elasticsearchSettings);
         }

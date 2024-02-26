@@ -17,8 +17,10 @@ namespace Repository.Implementation
         }
         public override void Insert(PermissionsEmployee permission)
         {
-            if(!set.Where(d=> d.Employees.Any(r=> r == permission.Employees[0])).Select(a=> a.PermissionTypes).Any(d=> d.Name == permission.PermissionTypes.Name))
-            set.Add(permission);
+            if (!set.Where(d => d.Employees.Any(r => r == permission.Employees[0])).Select(a => a.PermissionTypes).Any(d => d.Name == permission.PermissionTypes.Name))
+            {
+                set.Add(permission);
+            }
             else throw new System.NotImplementedException();
         }
     }
