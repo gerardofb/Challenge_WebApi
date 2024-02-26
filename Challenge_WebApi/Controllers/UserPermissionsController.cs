@@ -5,6 +5,7 @@ using Queries.Interfaces;
 using Infrastructure.Models;
 using Infrastructure.Contexts;
 using Challenge_WebApi.ViewModel;
+using Nest;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,12 +18,14 @@ namespace Challenge_WebApi.Controllers
         private UnitOfWorkPermissions unitOfWork;
         private IQueryPermissions queryPermissions;
         private ChallengeContext context;
+        private IElasticClient elasticClient;
         public UserPermissionsController(ChallengeContext contexto,
-            IQueryPermissions queryPerms)
+            IQueryPermissions queryPerms, IElasticClient clientElastic)
         {
             unitOfWork = new UnitOfWorkPermissions(contexto);
             queryPermissions = queryPerms;
             context = contexto;
+            elasticClient = clientElastic;
         }
         // GET: api/<ChallengeController>
 

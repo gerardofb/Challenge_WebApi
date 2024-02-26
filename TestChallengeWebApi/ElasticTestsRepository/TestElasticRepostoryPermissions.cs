@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Repository.Elastic;
-using Elastic.Clients.Elasticsearch;
+using Nest;
 using Infrastructure.ElasticViewModels;
 using Microsoft.Extensions.Configuration;
 
@@ -27,7 +27,7 @@ namespace TestChallengeWebApi.ElasticTestsRepository
         public void TestInsertEmployee()
         {
             var response = repositoryElasticPermissions.ElasticsearchClient?.GetAsync<ViewModelElasticPermissionsUser>(1, idx => idx.Index("my-tweet-index")).Result;
-            Assert.IsFalse(response.IsValidResponse);
+            Assert.IsFalse(response.IsValid);
         }
     }
 }
