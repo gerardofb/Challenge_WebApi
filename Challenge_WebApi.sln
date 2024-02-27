@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleSeedChallenge_TL", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "Queries\Queries.csproj", "{E018C278-28E8-40EA-8DEB-871A1850E19C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleConsumerTopics", "ConsoleConsumerTopics\ConsoleConsumerTopics.csproj", "{E4F2664B-3B05-4705-9BD3-E48D90BFC709}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{E018C278-28E8-40EA-8DEB-871A1850E19C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E018C278-28E8-40EA-8DEB-871A1850E19C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E018C278-28E8-40EA-8DEB-871A1850E19C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4F2664B-3B05-4705-9BD3-E48D90BFC709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4F2664B-3B05-4705-9BD3-E48D90BFC709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4F2664B-3B05-4705-9BD3-E48D90BFC709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4F2664B-3B05-4705-9BD3-E48D90BFC709}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

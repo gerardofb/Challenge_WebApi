@@ -1,6 +1,8 @@
 ﻿using Queries.Interfaces;
 using Infrastructure.Contexts;
 using Infrastructure.Models;
+using Confluent.Kafka;
+using System.Net;
 
 namespace Queries.Implementation
 {
@@ -8,9 +10,17 @@ namespace Queries.Implementation
     {
         private bool disposed = false;
         private ChallengeContext context;
+        private ProducerConfig configKafka;
+        private const string ModifyOp = "Modify";
+        private const string InsertOp = "Request";
+        private const string GetOp = "Get";
         public QueryPermissions(ChallengeContext context)
         {
             this.context = context;
+            configKafka = new ProducerConfig
+            {
+                BootstrapServers = "localhost:9094",
+            };
         }
         protected virtual void Dispose(bool disposing)
         {
@@ -30,6 +40,14 @@ namespace Queries.Implementation
             GC.SuppressFinalize(this);
         }
 
+        public async void ProduceMessage(string Message)
+        {
+            using (var producer = new ProducerBuilder<Null, string>(configKafka).Build())
+            {
+                await producer.ProduceAsync("logKafka", new Message<Null, string> { Value = String.Format("{0}/{1}", Guid.NewGuid().ToString("D"), Message) });
+            }
+        }
+
         public List<MaterializedViewPermissions> Get(int employeeId)
         {
             List<MaterializedViewPermissions> salida = null;
@@ -40,6 +58,10 @@ namespace Queries.Implementation
                 if (salida != null && salida.Count == 0)
                 {
                     salida = null;
+                }
+                else
+                {
+                    ProduceMessage(GetOp);
                 }
             }
             return salida;
@@ -54,6 +76,7 @@ namespace Queries.Implementation
                 if (salida.Count > 0)
                 {
                     salida.ForEach(r => r.PermissionTypes = context.PermissionsTypes.Find(r.PermissionTypeId));
+                    ProduceMessage(GetOp);
                 }
                 else
                 {
@@ -79,6 +102,7 @@ namespace Queries.Implementation
                     {
                         salida.ForEach(r => r.WorkArea = context.WorkAreas.Where(a => a.Employee.Contains(r)).ToList());
                         employees = salida;
+                        ProduceMessage(GetOp);
                     }
                 }
                 catch (Exception ex)
@@ -91,12 +115,17 @@ namespace Queries.Implementation
 
         Employee IQueryPermissions.Get(Employee employee)
         {
+            ProduceMessage(GetOp);
             return context.Employees.Find(employee.Id);
+            
         }
 
         public PermissionType Get(PermissionsEmployee permission)
         {
+            ProduceMessage(GetOp);
             return context.PermissionsTypes.Find(permission.PermissionTypeId);
         }
+
+
     }
 }
