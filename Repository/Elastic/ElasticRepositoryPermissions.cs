@@ -14,7 +14,7 @@ namespace Repository.Elastic
 
             _connectionSettings = new ConnectionSettings(new SingleNodeConnectionPool(new Uri("https://localhost:9200"))).DefaultIndex("permissionsindex").
                 DefaultMappingFor<ViewModelElasticPermissionsUser>(m=> m.IdProperty("PermissionGuid")
-                );
+                ).DisableDirectStreaming();
 
             _connectionSettings.CertificateFingerprint(configuration_fingerprint.Value).BasicAuthentication("elastic", configuration_password.Value);
             _elasticsearchSettings = new Transport<ConnectionSettings>(_connectionSettings);
@@ -30,11 +30,12 @@ namespace Repository.Elastic
                 { 
                     Field = sortField,
                     GreaterThanOrEqualTo = DateMath.Anchored(ancla).RoundTo(DateMathTimeUnit.Minute),
-                    Format = "dd/MM/yyyy hh:mm",
+                    //Format = 
                     TimeZone = "+01:00"
                 };
-                var request = new SearchRequest<TEntity>()
+                var request = new SearchRequest<ViewModelElasticPermissionsUser>()
                 {
+                    
                     Query = Query,
                     Sort = new List<ISort>
                     {

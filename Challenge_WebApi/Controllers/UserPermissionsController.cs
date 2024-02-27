@@ -18,16 +18,17 @@ namespace Challenge_WebApi.Controllers
     public class UserPermissionsController : ControllerBase
     {
         private UnitOfWorkPermissions unitOfWork;
+        private UnitOfWorkElasticPermissions unitOfWorkElastic;
         private IQueryPermissions queryPermissions;
         private ChallengeContext context;
         private ElasticRepositoryPermissions<ViewModelElasticPermissionsUser> elasticRepository;
         public UserPermissionsController(ChallengeContext contexto,
-            IQueryPermissions queryPerms, ElasticRepositoryPermissions<ViewModelElasticPermissionsUser> repositorioElastic)
+            IQueryPermissions queryPerms, UnitOfWorkElasticPermissions _unitOfWorkElastic)
         {
+            unitOfWorkElastic = _unitOfWorkElastic;
             unitOfWork = new UnitOfWorkPermissions(contexto);
             queryPermissions = queryPerms;
             context = contexto;
-            elasticRepository = repositorioElastic;
         }
         // GET: api/<ChallengeController>
 
@@ -45,7 +46,7 @@ namespace Challenge_WebApi.Controllers
                 {
                     foreach (MaterializedViewPermissions permission in permissions)
                     {
-                       
+
                         salida.Add(new ViewModelPermissionsUser
                         {
                             LastUpdated = permission.LastUpdated,
@@ -110,7 +111,7 @@ namespace Challenge_WebApi.Controllers
                     IEnumerable<string> oldPermissions = from a in permissionschange
                                                          select a.PermissionTypes != null ?
                                                          a.PermissionTypes.Name : "";
-                    if (oldPermissions.Any(x=> x == newPermissions.OldPermission))
+                    if (oldPermissions.Any(x => x == newPermissions.OldPermission))
                     {
 
                         PermissionType modifiedPermission = permissionschange.Select(d => d.PermissionTypes)
@@ -127,8 +128,24 @@ namespace Challenge_WebApi.Controllers
                                     unitOfWork.PermissionTypeRepository.Update(modifiedPermission);
                                     unitOfWork.Save();
                                     transaction.Commit();
+                                    // GUARDADO DE ENTIDAD EN ELASTIC SEARCH
+                                    PermissionsEmployee permission  = permissionschange.First(a=> a.PermissionTypes.Name == newPermissions.NewPermission);
+                                    ViewModelElasticPermissionsUser permissionUserElastic = unitOfWorkElastic.ElasticRepositoryPermissions.InsertPriorPermissions(new ViewModelElasticPermissionsUser
+                                    {
+                                        LastUpdated = DateTime.UtcNow,
+                                        PermissionGuid = permission.Guid,
+                                        PermissionName = newPermissions.NewPermission,
+                                        UserId = employee.Id,
+                                        UserName = String.Format("{0} {1}", employee.Name, employee.LastName)
+                                    }).Result;
+                                    if (permissionUserElastic == null)
+                                    {
+                                        throw new Exception("No fue posible guardar en el índice de elastic search");
+                                    }
+                                    // FINALIZA GUARDADO DE ENTIDAD EN ELASTIC SEARCH
+                                    
                                 }
-                                else return BadRequest(String.Join(',',ModelState.Values.Where(a=> a.Errors.Count > 0)));
+                                else return BadRequest(String.Join(',', ModelState.Values.Where(a => a.Errors.Count > 0)));
                             }
                             catch (Exception ex)
                             {
@@ -139,7 +156,7 @@ namespace Challenge_WebApi.Controllers
                         }
                         return Ok("Changes commited");
                     }
-                    
+
                 }
                 return NotFound("Could not find a permission to change");
             }
@@ -165,12 +182,16 @@ namespace Challenge_WebApi.Controllers
                     unitOfWork.PermissionRepository.Insert(newpermission);
                     unitOfWork.Save();
                     // GUARDADO DE ENTIDAD EN ELASTIC SEARCH
-                    PermissionsEmployee permission = unitOfWork.PermissionRepository.Get(a=> a.Guid == newpermission.Guid).First();
-                    ViewModelElasticPermissionsUser permissionUserElastic = elasticRepository.InsertPriorPermissions(new ViewModelElasticPermissionsUser
-                    { LastUpdated = permission.LastUpdated, PermissionGuid = permission.Guid, 
-                        PermissionName = permType.Name, UserId = employee.Id, 
-                        UserName = String.Format("{0} {1}", employee.Name, employee.LastName) }).Result;
-                    if(permissionUserElastic == null)
+                    PermissionsEmployee permission = unitOfWork.PermissionRepository.Get(a => a.Guid == newpermission.Guid).First();
+                    ViewModelElasticPermissionsUser permissionUserElastic = unitOfWorkElastic.ElasticRepositoryPermissions.InsertPriorPermissions(new ViewModelElasticPermissionsUser
+                    {
+                        LastUpdated = permission.LastUpdated,
+                        PermissionGuid = permission.Guid,
+                        PermissionName = permType.Name,
+                        UserId = employee.Id,
+                        UserName = String.Format("{0} {1}", employee.Name, employee.LastName)
+                    }).Result;
+                    if (permissionUserElastic == null)
                     {
                         throw new Exception("No fue posible guardar en el índice de elastic search");
                     }

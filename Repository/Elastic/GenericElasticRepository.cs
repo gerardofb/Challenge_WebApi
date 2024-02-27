@@ -30,6 +30,10 @@ namespace Repository.Elastic
             {
                 return null;
             }
+            else
+            {
+                _entity = priorPermission;
+            }
             return _entity;
         }
 
