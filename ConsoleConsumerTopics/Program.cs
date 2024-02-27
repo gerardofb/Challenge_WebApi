@@ -13,38 +13,41 @@ Console.WriteLine("Escriba un número de segundos a esperar para terminar la eje
 string? nuevaCadena = Console.ReadLine();
 int numerosegundos;
 bool secondsset = int.TryParse(nuevaCadena, out numerosegundos);
-Console.WriteLine("¿Desea continuar  y/n? En cualquier momento presione X para terminar");
-using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
-{
-    consumer.Subscribe("logKafka");
-    bool cancelled = false;
-    DateTime fechaactual = DateTime.Now;
-    while (!cancelled)
+Console.WriteLine("¿Desea continuar  y/n? En cualquier momento presione CTRL+C para terminar");
+string? permit = Console.ReadLine();
+if (!String.IsNullOrEmpty(permit) && permit.ToUpper() == "Y") {
+    using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
     {
-
-        if (secondsset)
+        consumer.Subscribe("logKafka");
+        bool cancelled = false;
+        DateTime fechaactual = DateTime.Now;
+        while (!cancelled)
         {
-            DateTime newdate = DateTime.Now;
-            int segundoselapsed = (int)newdate.Subtract(fechaactual).TotalSeconds;
-            if (segundoselapsed > numerosegundos)
-                cancelled = true;
-            var consumeResult = consumer.Consume(numerosegundos);
-            if (consumeResult != null)
+
+            if (secondsset)
             {
-                Console.WriteLine(consumeResult.Value);
+                DateTime newdate = DateTime.Now;
+                int segundoselapsed = (int)newdate.Subtract(fechaactual).TotalSeconds;
+                if (segundoselapsed > numerosegundos)
+                    cancelled = true;
+                var consumeResult = consumer.Consume(numerosegundos);
+                if (consumeResult != null)
+                {
+                    Console.WriteLine(consumeResult.Value);
+                }
             }
-        }
-        else
-        {
-            var consumeResult = consumer.Consume();
-            if (consumeResult != null)
+            else
             {
-                Console.WriteLine(consumeResult.Value);
+                var consumeResult = consumer.Consume();
+                if (consumeResult != null)
+                {
+                    Console.WriteLine(consumeResult.Value);
+                }
             }
+
+
         }
 
-        
+        consumer.Close();
     }
-
-    consumer.Close();
 }
