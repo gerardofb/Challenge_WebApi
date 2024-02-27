@@ -8,19 +8,24 @@ using Repository.Elastic;
 using Nest;
 using Infrastructure.ElasticViewModels;
 using Microsoft.Extensions.Configuration;
+using Queries.Implementation;
+using Queries.Interfaces;
+using Repository.Interfaces;
 
 namespace TestChallengeWebApi.ElasticTestsRepository
 {
     internal class TestElasticRepostoryPermissions
     {
         private ElasticRepositoryPermissions<ViewModelElasticPermissionsUser> repositoryElasticPermissions;
+        private IQueryElasticPermissions<ViewModelElasticPermissionsUser> queryElasticPermissions;
         [SetUp]
         public void Setup()
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
            .AddJsonFile("appsettings.json").Build();
-            repositoryElasticPermissions = new ElasticRepositoryPermissions<ViewModelElasticPermissionsUser>(configuration);
+            repositoryElasticPermissions = new ElasticRepositoryPermissions<ViewModelElasticPermissionsUser>(configuration);    
+            queryElasticPermissions = new QueryElasticPermissions(configuration);
         }
 
         [Test]
@@ -32,7 +37,7 @@ namespace TestChallengeWebApi.ElasticTestsRepository
         [Test]
         public void TestGetEmployeePermissions()
         {
-            List<ViewModelElasticPermissionsUser> salida = repositoryElasticPermissions.GetPermissionsOrderedByDateUpdated("LastUpdated", "25/02/2024 00:00");
+            List<ViewModelElasticPermissionsUser> salida = queryElasticPermissions.GetPermissionsOrderedByDateUpdated("LastUpdated", "25/02/2024 00:00");
             Assert.IsTrue(salida == null);
         }
     }

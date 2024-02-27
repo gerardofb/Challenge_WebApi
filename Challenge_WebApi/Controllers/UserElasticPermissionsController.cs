@@ -2,6 +2,7 @@
 using Infrastructure.ElasticViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Queries.Interfaces;
+using Queries.Implementation;
 using Repository.Elastic;
 using Repository.UnitOfWork;
 
@@ -17,21 +18,22 @@ namespace Challenge_WebApi.Controllers
         private UnitOfWorkElasticPermissions unitOfWorkElastic;
         private IQueryPermissions queryPermissions;
         private ChallengeContext context;
-        private ElasticRepositoryPermissions<ViewModelElasticPermissionsUser> elasticRepository;
+        private IQueryElasticPermissions<ViewModelElasticPermissionsUser> elasticQueries;
         public UserElasticPermissionsController(ChallengeContext contexto,
-            IQueryPermissions queryPerms, UnitOfWorkElasticPermissions _unitOfWorkElastic)
+            IQueryPermissions queryPerms, UnitOfWorkElasticPermissions _unitOfWorkElastic, QueryElasticPermissions _elasticQueries)
         {
             unitOfWorkElastic = _unitOfWorkElastic;
             unitOfWork = new UnitOfWorkPermissions(contexto);
             queryPermissions = queryPerms;
             context = contexto;
+            elasticQueries = _elasticQueries;
         }
         // GET: api/<UserElasticPermissionsController>
         [HttpGet]
         public List<ViewModelElasticPermissionsUser> Get()
         {
             DateTime dateSubstract = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7));
-            return unitOfWorkElastic.ElasticRepositoryPermissions.GetPermissionsOrderedByDateUpdated("lastUpdated", dateSubstract.ToString());
+            return elasticQueries.GetPermissionsOrderedByDateUpdated("lastUpdated", dateSubstract.ToString());
         }
 
         // GET api/<UserElasticPermissionsController>/5
@@ -39,7 +41,7 @@ namespace Challenge_WebApi.Controllers
         public List<ViewModelElasticPermissionsUser> Get(int id)
         {
             DateTime dateSubstract = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7));
-            return unitOfWorkElastic.ElasticRepositoryPermissions.GetPermissionsOrderedByDateUpdated("lastUpdated", dateSubstract.ToString()).Where(a=> a.UserId == id).ToList();
+            return elasticQueries.GetPermissionsOrderedByDateUpdated("lastUpdated", dateSubstract.ToString()).Where(a=> a.UserId == id).ToList();
         }
 
         // POST api/<UserElasticPermissionsController>

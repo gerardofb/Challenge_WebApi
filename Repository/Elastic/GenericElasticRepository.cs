@@ -17,11 +17,7 @@ namespace Repository.Elastic
         }
         public GenericElasticRepository(IConfigurationRoot _configuration)
         {
-            //IConfigurationSection configuration_fingerprint = _configuration.GetSection("FingerprintElastic").GetSection("DefaultNode");
-            //IConfigurationSection configuration_password = _configuration.GetSection("PasswordElastic");
-            //_elasticsearchSettings = new Transport<ConnectionSettings>(new ConnectionSettings(
-            //    new SingleNodeConnectionPool(new Uri("https://localhost:9200"))));
-            //_elasticsearchClient = new ElasticClient(_elasticsearchSettings);
+            
         }
         public virtual async Task<TEntity> InsertPriorPermissions(TEntity priorPermission)
         {
@@ -53,9 +49,6 @@ namespace Repository.Elastic
             }
             return null;
         }
-        public virtual List<TEntity> GetPermissionsOrderedByDateUpdated(string sortField, string dateInitial)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
