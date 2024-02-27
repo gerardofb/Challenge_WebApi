@@ -9,11 +9,18 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Infrastructure.ElasticViewModels;
 using Repository.UnitOfWork;
 using Nest;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json").Build();
+Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+            .WriteTo.Console()
+            .WriteTo.File("logs/challengewebapi_log.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
 // Add services to the container.
 QueryElasticPermissions queryElasticPermissions = new QueryElasticPermissions(configuration);
 UnitOfWorkElasticPermissions unitOfWorkElastic = new UnitOfWorkElasticPermissions(configuration);
@@ -23,6 +30,7 @@ builder.Services.AddDbContext<ChallengeContext>(options =>
 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IQueryPermissions, QueryPermissions>();
 //builder.Services.AddControllers();
+builder.Host.UseSerilog();
 
 builder.Services.AddSingleton<QueryElasticPermissions>(queryElasticPermissions);
 builder.Services.AddMvc();

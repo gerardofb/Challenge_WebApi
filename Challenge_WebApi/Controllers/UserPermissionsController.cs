@@ -8,6 +8,7 @@ using Challenge_WebApi.ViewModel;
 using Nest;
 using Repository.Elastic;
 using Infrastructure.ElasticViewModels;
+using Serilog;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,6 +36,8 @@ namespace Challenge_WebApi.Controllers
         [HttpGet("GetPermissions/{id}")]
         public IEnumerable<ViewModelPermissionsUser> GetPermissions(int id)
         {
+            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            Log.Information("Consultando permisos de usuario en la ruta {Ruta}", ruta);
             List<ViewModelPermissionsUser> salida = null;
             List<MaterializedViewPermissions> permissions = null;
             try
@@ -60,7 +63,7 @@ namespace Challenge_WebApi.Controllers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                Log.Error("Detalles del error {Err} en la ruta {Ruta}", ex.Message, ruta);
             }
             return (salida != null && salida.Count > 0) ? salida : null;
         }
@@ -69,6 +72,8 @@ namespace Challenge_WebApi.Controllers
         [HttpGet("GetUser/{name}")]
         public List<ViewModelUser> GetUser(string name)
         {
+            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            Log.Information("Consultando permisos de usuario por elastic search en la ruta {Ruta}", ruta);
             List<Employee> employees = null;
             List<ViewModelUser> users = null;
             try
@@ -91,7 +96,7 @@ namespace Challenge_WebApi.Controllers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                Log.Error("Detalles del error {Err} en la ruta {Ruta}", ex.Message, ruta);
             }
             return users.Count > 0 ? users : null;
         }
@@ -100,8 +105,11 @@ namespace Challenge_WebApi.Controllers
         [HttpPost("ModifyPermission/{id}")]
         public ObjectResult Post(int id, [FromBody] ViewModelChangePermission newPermissions)
         {
+            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            Log.Information("Modificando permisos de usuario por en la ruta {Ruta}", ruta);
             try
             {
+
                 Employee employee = queryPermissions.Get(new Employee { Id = id });
                 List<PermissionsEmployee> permissionschange = queryPermissions.GetPermissionsExplicit(id);
 
@@ -129,7 +137,7 @@ namespace Challenge_WebApi.Controllers
                                     unitOfWork.Save();
                                     transaction.Commit();
                                     // GUARDADO DE ENTIDAD EN ELASTIC SEARCH
-                                    PermissionsEmployee permission  = permissionschange.First(a=> a.PermissionTypes.Name == newPermissions.NewPermission);
+                                    PermissionsEmployee permission = permissionschange.First(a => a.PermissionTypes.Name == newPermissions.NewPermission);
                                     ViewModelElasticPermissionsUser permissionUserElastic = unitOfWorkElastic.ElasticRepositoryPermissions.InsertPriorPermissions(new ViewModelElasticPermissionsUser
                                     {
                                         LastUpdated = DateTime.UtcNow,
@@ -143,13 +151,13 @@ namespace Challenge_WebApi.Controllers
                                         throw new Exception("No fue posible guardar en el índice de elastic search");
                                     }
                                     // FINALIZA GUARDADO DE ENTIDAD EN ELASTIC SEARCH
-                                    
+
                                 }
                                 else return BadRequest(String.Join(',', ModelState.Values.Where(a => a.Errors.Count > 0)));
                             }
                             catch (Exception ex)
                             {
-                                System.Diagnostics.Debug.WriteLine(ex.Message);
+                                Log.Error("Detalles del error {Err} en la ruta {Ruta}", ex.Message, ruta);
                                 transaction.Rollback();
                                 return BadRequest("An unexpected error ocurred");
                             }
@@ -160,8 +168,9 @@ namespace Challenge_WebApi.Controllers
                 }
                 return NotFound("Could not find a permission to change");
             }
-            catch
+            catch (Exception ex)
             {
+                Log.Error("Detalles del error {Err} en la ruta {Ruta}", ex.Message, ruta);
                 return BadRequest("An unexpected error ocurred");
             }
         }
@@ -170,6 +179,8 @@ namespace Challenge_WebApi.Controllers
         [HttpPut("RequestPermission/{id}")]
         public StatusCodeResult RequestPermission(int id, [FromBody] string permissionValue)
         {
+            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            Log.Information("Agregando permisos de usuario por en la ruta {Ruta}", ruta);
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -202,13 +213,13 @@ namespace Challenge_WebApi.Controllers
                 catch (NotImplementedException ex)
                 {
                     transaction.Rollback();
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    Log.Error("Detalles del error {Err} en la ruta {Ruta}", ex.Message, ruta);
                     return NotFound();
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    Log.Error("Detalles del error {Err} en la ruta {Ruta}", ex.Message, ruta);
                     return BadRequest();
                 }
 
@@ -219,7 +230,16 @@ namespace Challenge_WebApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Detalles del error {Err} en la ruta {Ruta}", ex.Message, ruta);
+                throw ex;
+            }
         }
     }
 }
