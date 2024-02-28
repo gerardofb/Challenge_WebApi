@@ -21,8 +21,9 @@
 
 ```
 The tasks marked completed are so far the result.
-The challenge was made for collaboration with the company contacted by @workana/team [Workana](https://www.workana.com/es)
 ```
+The challenge was made for collaboration with the company contacted by @workana/team [Workana](https://www.workana.com/es)
+
 
 > [!IMPORTANT]
 > Until the docker image is generated, the only way to run this solution is building independently the docker images and ajusting configuration of projects:
