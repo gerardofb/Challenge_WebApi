@@ -45,7 +45,7 @@ namespace Repository.Elastic
                  .Size(30));
              }).Wait(TimeSpan.FromMinutes(5)))
             {
-                return priorPermissions;
+                return await Task.Run(()=>priorPermissions);
             }
             return null;
         }

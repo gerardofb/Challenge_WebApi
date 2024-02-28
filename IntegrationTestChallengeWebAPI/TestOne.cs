@@ -26,7 +26,7 @@ namespace IntegrationTestChallengeWebAPI
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8",
-                response.Content.Headers.ContentType.ToString());
+                response.Content?.Headers?.ContentType?.ToString());
             
         }
         [Theory]
