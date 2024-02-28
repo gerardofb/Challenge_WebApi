@@ -14,7 +14,7 @@
 - [x] Making use of repository pattern and Unit of Work and CQRS pattern(Desired). Bear in mind that is required to stick to a proper service architecture so that creating different layers and dependency injection is a must-have.
 - [x] Add information logs in every api endpoint and log the name of operation using serilog as log library.
 - [x] Create Unit Testing and Integration Testing to call the three of the services.
-- [x] Use good practices as much as possible.0
+- [x] Use good practices as much as possible.
 - [ ] Prepare the solution to be containerized in a docker image.
 - [ ] Prepare the solution to be deployed in kubernetes. (desired)
 - [x] Upload exercise to some repository (github, gitlab,etc).
