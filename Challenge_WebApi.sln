@@ -15,9 +15,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleSeedChallenge_TL", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "Queries\Queries.csproj", "{E018C278-28E8-40EA-8DEB-871A1850E19C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleConsumerTopics", "ConsoleConsumerTopics\ConsoleConsumerTopics.csproj", "{E4F2664B-3B05-4705-9BD3-E48D90BFC709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleConsumerTopics", "ConsoleConsumerTopics\ConsoleConsumerTopics.csproj", "{E4F2664B-3B05-4705-9BD3-E48D90BFC709}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTestChallengeWebAPI", "IntegrationTestChallengeWebAPI\IntegrationTestChallengeWebAPI.csproj", "{F21B5D94-89DF-4C28-9A60-7A92C5244FA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTestChallengeWebAPI", "IntegrationTestChallengeWebAPI\IntegrationTestChallengeWebAPI.csproj", "{F21B5D94-89DF-4C28-9A60-7A92C5244FA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{063D349D-D057-4B10-9F96-3BE4B0550FC7}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		Challenge_WebApi\.env = Challenge_WebApi\.env
+		.env = .env
+		Challenge_WebApi\docker-compose.yml = Challenge_WebApi\docker-compose.yml
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

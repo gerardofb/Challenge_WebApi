@@ -20,7 +20,7 @@ namespace TestChallengeWebApi.KafkaTests
         {
             configKafka = new ProducerConfig
             {
-                BootstrapServers = "localhost:9094",
+                BootstrapServers = "localhost:9092",
             };
         }
         [Test]
