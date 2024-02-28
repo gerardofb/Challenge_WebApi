@@ -43,7 +43,7 @@ namespace IntegrationTestChallengeWebAPI
             // Assert
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            Assert.True(content.Contains("\"userId\":5"));
+            Assert.Contains("\"userId\":5", content);
         }
         [Theory]
         [InlineData("/api/UserPermissions/GetUser/Ricardo")]
@@ -57,7 +57,7 @@ namespace IntegrationTestChallengeWebAPI
             // Assert
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            Assert.True(content.Contains("\"name\":\"Ricardo"));
+            Assert.Contains("\"name\":\"Ricardo", content);
         }
     }
 }
