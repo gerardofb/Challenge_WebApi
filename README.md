@@ -34,4 +34,4 @@ The challenge was made for collaboration with the company contacted by @workana/
 The challenge follows the Unit Of Work and CQRS Design Patterns:
 
 [CQRS](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs)
-(Unit of Work)(https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/june/the-unit-of-work-pattern-and-persistence-ignorance)
+[Unit of Work](https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/june/the-unit-of-work-pattern-and-persistence-ignorance)
