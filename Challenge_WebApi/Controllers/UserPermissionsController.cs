@@ -36,7 +36,7 @@ namespace Challenge_WebApi.Controllers
         [HttpGet("GetPermissions/{id}")]
         public IEnumerable<ViewModelPermissionsUser> GetPermissions(int id)
         {
-            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            var ruta = String.Format("{0} {1}://{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
             Log.Information("Consultando permisos de usuario en la ruta {Ruta}", ruta);
             List<ViewModelPermissionsUser> salida = null;
             List<MaterializedViewPermissions> permissions = null;
@@ -72,7 +72,7 @@ namespace Challenge_WebApi.Controllers
         [HttpGet("GetUser/{name}")]
         public List<ViewModelUser> GetUser(string name)
         {
-            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            var ruta = String.Format("{0} {1}://{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
             Log.Information("Consultando permisos de usuario por elastic search en la ruta {Ruta}", ruta);
             List<Employee> employees = null;
             List<ViewModelUser> users = null;
@@ -105,7 +105,7 @@ namespace Challenge_WebApi.Controllers
         [HttpPost("ModifyPermission/{id}")]
         public ObjectResult Post(int id, [FromBody] ViewModelChangePermission newPermissions)
         {
-            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            var ruta = String.Format("{0} {1}://{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
             Log.Information("Modificando permisos de usuario por en la ruta {Ruta}", ruta);
             try
             {
@@ -179,7 +179,7 @@ namespace Challenge_WebApi.Controllers
         [HttpPut("RequestPermission/{id}")]
         public StatusCodeResult RequestPermission(int id, [FromBody] string permissionValue)
         {
-            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            var ruta = String.Format("{0} {1}://{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
             Log.Information("Agregando permisos de usuario por en la ruta {Ruta}", ruta);
             using (var transaction = context.Database.BeginTransaction())
             {
@@ -230,7 +230,7 @@ namespace Challenge_WebApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            var ruta = String.Format("{0} {1}://{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
             try
             {
                 throw new NotImplementedException();

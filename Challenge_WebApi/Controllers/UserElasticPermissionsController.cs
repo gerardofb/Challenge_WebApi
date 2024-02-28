@@ -35,7 +35,7 @@ namespace Challenge_WebApi.Controllers
         [HttpGet]
         public List<ViewModelElasticPermissionsUser> Get()
         {
-            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            var ruta = String.Format("{0} {1}://{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
             Log.Information("Consultando permisos de usuario por elastic search en la ruta {Ruta}",
                 ruta);
             try
@@ -54,7 +54,7 @@ namespace Challenge_WebApi.Controllers
         [HttpGet("{id}")]
         public List<ViewModelElasticPermissionsUser> Get(int id)
         {
-            var ruta = String.Format("{0} {1}//{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
+            var ruta = String.Format("{0} {1}://{2}{3}{4}", HttpContext.Request.Method, HttpContext.Request.Scheme, HttpContext.Request.Host, HttpContext.Request.Path, HttpContext.Request.QueryString);
             try
             {
                 Log.Information("Consultando permisos de usuario por elastic search en la ruta {Ruta}",
