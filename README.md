@@ -32,5 +32,6 @@ The challenge was made for collaboration with the company contacted by @workana/
 - [Elastic Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
 
 The challenge follows the Unit Of Work and CQRS Design Patterns:
+
 https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs
 https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/june/the-unit-of-work-pattern-and-persistence-ignorance
