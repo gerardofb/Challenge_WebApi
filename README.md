@@ -27,8 +27,8 @@ The challenge was made for collaboration with the company contacted by @workana/
 > [!IMPORTANT]
 > Until the docker image is generated, the only way to run this solution is building independently the docker images and ajusting configuration of projects:
 - [Bitnami Kafka](https://hub.docker.com/r/bitnami/kafka/#!)
-- [Microsoft SQL Server] (https://hub.docker.com/_/microsoft-mssql-server)
-- [Elastic Search] (https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
+- [Microsoft SQL Server](https://hub.docker.com/_/microsoft-mssql-server)
+- [Elastic Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
 
 The challenge follows the Unit Of Work and CQRS Patterns:
 https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs
