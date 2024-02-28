@@ -50,6 +50,7 @@ services:
       - MSSQL_PID=Express
     networks:
       challenge-network:
+      # el nombre del contenedor y el alias en la red deben ser el mismo en la cadena de conexión
         aliases:
           - mssql1
   esearch01:
