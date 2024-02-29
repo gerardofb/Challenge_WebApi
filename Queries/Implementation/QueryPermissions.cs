@@ -19,7 +19,7 @@ namespace Queries.Implementation
             this.context = context;
             configKafka = new ProducerConfig
             {
-                BootstrapServers = "localhost:9092",
+                BootstrapServers = "kafka:9092",
             };
         }
         protected virtual void Dispose(bool disposing)

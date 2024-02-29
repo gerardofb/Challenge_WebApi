@@ -23,7 +23,7 @@ namespace Repository.Implementation
             this.set = context.Set<TEntity>();
             configKafka = new ProducerConfig
             {
-                BootstrapServers = "localhost:9092",
+                BootstrapServers = "kafka:9092",
             };
         }
         public virtual IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
