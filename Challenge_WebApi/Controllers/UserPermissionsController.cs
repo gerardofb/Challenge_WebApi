@@ -146,10 +146,6 @@ namespace Challenge_WebApi.Controllers
                                         UserId = employee.Id,
                                         UserName = String.Format("{0} {1}", employee.Name, employee.LastName)
                                     }).Result;
-                                    if (permissionUserElastic == null)
-                                    {
-                                        throw new Exception("No fue posible guardar en el índice de elastic search");
-                                    }
                                     // FINALIZA GUARDADO DE ENTIDAD EN ELASTIC SEARCH
 
                                 }

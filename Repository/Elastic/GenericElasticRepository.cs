@@ -24,7 +24,7 @@ namespace Repository.Elastic
             IndexResponse? indexResponse = await _elasticsearchClient.IndexAsync<TEntity>(new IndexRequest<TEntity>(priorPermission));
             if (!indexResponse.IsValid)
             {
-                return null;
+                throw new ElasticsearchClientException(String.Format("No fue posible guardar en el índice de elastic search. Detalles del error {0}: ",indexResponse.DebugInformation));
             }
             else
             {
