@@ -15,7 +15,7 @@
 - [x] Add information logs in every api endpoint and log the name of operation using serilog as log library.
 - [x] Create Unit Testing and Integration Testing to call the three of the services.
 - [x] Use good practices as much as possible.
-- [ ] Prepare the solution to be containerized in a docker image.
+- [x] Prepare the solution to be containerized in a docker image.
 - [ ] Prepare the solution to be deployed in kubernetes. (desired)
 - [x] Upload exercise to some repository (github, gitlab,etc).
 
