@@ -19,7 +19,7 @@
 - [ ] Prepare the solution to be deployed in kubernetes. (desired)
 - [x] Upload exercise to some repository (github, gitlab,etc).
 
- [!NOTE]
+> [!NOTE]
 - The tasks marked completed are so far the result.
 
 The challenge was made for collaboration with the company contacted by @workana/team [Workana](https://www.workana.com/es)
