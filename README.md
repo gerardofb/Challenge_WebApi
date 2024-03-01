@@ -35,7 +35,7 @@ docker-compose up --force-recreate --build
 > The project ConsoleConsumerTopics is just for checking the queues in kafka.
 
 > [!IMPORTANT]
-> If you wish not to use the docker image generated in the solution the only way to run this solution is building independently the docker images and ajusting configuration of projects:
+> If you wish not to use the docker image generated in the solution the only way to run this solution is building independently the docker images and ajusting configuration of docker images:
 - [Bitnami Kafka](https://hub.docker.com/r/bitnami/kafka/#!)
 - [Microsoft SQL Server](https://hub.docker.com/_/microsoft-mssql-server)
 - [Elastic Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
