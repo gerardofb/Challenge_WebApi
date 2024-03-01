@@ -31,7 +31,7 @@ docker-compose up --force-recreate --build
 ```
 > [!TIP]
 > For proper working of the api, you should seed the database using only once the .exe in the project ConsoleSeedChallenge_TL
-> Lastly, navigate to http://localhost:6400/swagger/index.html and test the API. The project ConsoleConsumerTopics is just for checking the queues in kafka
+> Lastly, navigate to http://localhost:6400/swagger/index.html and test the API. The project ConsoleConsumerTopics is just for checking the queues in kafka.
 
 > [!IMPORTANT]
 > If you wish not to use the docker image generated in the solution the only way to run this solution is building independently the docker images and ajusting configuration of projects:
