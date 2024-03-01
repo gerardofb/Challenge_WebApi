@@ -14,19 +14,10 @@ using Serilog.Events;
 using System.Security.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
-IConfigurationRoot configuration;
-if (!builder.Environment.IsDevelopment())
-{
-    configuration = new ConfigurationBuilder()
+
+   IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json").Build();
-}
-else
-{
-    configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings_dev.json").Build();
-}
 Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
             .WriteTo.Console()
@@ -36,8 +27,16 @@ Log.Logger = new LoggerConfiguration()
 QueryElasticPermissions queryElasticPermissions = new QueryElasticPermissions(configuration);
 UnitOfWorkElasticPermissions unitOfWorkElastic = new UnitOfWorkElasticPermissions(configuration);
 builder.Services.AddSingleton<UnitOfWorkElasticPermissions>(unitOfWorkElastic);
-builder.Services.AddDbContext<ChallengeContext>(options =>
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddDbContext<ChallengeContext>(options =>
 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+}
+else
+{
+    builder.Services.AddDbContext<ChallengeContext>(options =>
+options.UseSqlServer(configuration.GetConnectionString("MigrationConnection")));
+}
 builder.Services.AddScoped<IQueryPermissions, QueryPermissions>();
 builder.Host.UseSerilog();
 
