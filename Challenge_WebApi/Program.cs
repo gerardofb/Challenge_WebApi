@@ -14,10 +14,19 @@ using Serilog.Events;
 using System.Security.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
-
-IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json").Build();
+IConfigurationRoot configuration;
+if (!builder.Environment.IsDevelopment())
+{
+    configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json").Build();
+}
+else
+{
+    configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings_dev.json").Build();
+}
 Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
             .WriteTo.Console()

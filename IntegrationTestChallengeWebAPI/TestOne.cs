@@ -14,7 +14,7 @@ namespace IntegrationTestChallengeWebAPI
             _factory = factory;
         }
         [Theory]
-        [InlineData("/api/UserPermissions/GetPermissions/5")]
+        [InlineData("/api/UserPermissions/GetPermissions/2")]
         
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
         {
@@ -31,7 +31,7 @@ namespace IntegrationTestChallengeWebAPI
         }
         [Theory]
         [InlineData("/api/UserElasticPermissions")]
-        [InlineData("/api/UserElasticPermissions/5")]
+        [InlineData("/api/UserElasticPermissions/2")]
         
         public async Task Get_EndpointContentFirstTest(string url)
         {
@@ -43,7 +43,7 @@ namespace IntegrationTestChallengeWebAPI
             // Assert
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            Assert.Contains("\"userId\":5", content);
+            Assert.Contains("\"userId\":2", content);
         }
         [Theory]
         [InlineData("/api/UserPermissions/GetUser/Ricardo")]
