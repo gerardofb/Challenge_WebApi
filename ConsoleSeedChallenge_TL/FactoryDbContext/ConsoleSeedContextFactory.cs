@@ -21,7 +21,7 @@ namespace TestChallengeWebApi.FactoryDbContext
            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
            .AddJsonFile("appsettings.json").Build();
             var optionsBuilder = new DbContextOptionsBuilder<ChallengeContext>();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("MigrationConnection"));
 
             return new ChallengeContext(optionsBuilder.Options);
         }
