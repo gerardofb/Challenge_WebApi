@@ -24,9 +24,17 @@ The tasks marked completed are so far the result.
 ```
 The challenge was made for collaboration with the company contacted by @workana/team [Workana](https://www.workana.com/es)
 
+> [!NOTE]
+> To run the solution from the docker image, just run from the root of the solution:
+```
+docker-compose up --force-recreate --build
+```
+> Then, for proper working of the api, you must seed the database using only once the .exe in the project ConsoleSeedChallenge_TL
+> Lastly, navigate to http://localhost:6400/swagger/index.html and test the API
+> The project ConsoleConsumerTopics is just for checking the queues in kafka
 
 > [!IMPORTANT]
-> Until the docker image is generated, the only way to run this solution is building independently the docker images and ajusting configuration of projects:
+> If you wish not to use the docker image generated in the solution the only way to run this solution is building independently the docker images and ajusting configuration of projects:
 - [Bitnami Kafka](https://hub.docker.com/r/bitnami/kafka/#!)
 - [Microsoft SQL Server](https://hub.docker.com/_/microsoft-mssql-server)
 - [Elastic Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
