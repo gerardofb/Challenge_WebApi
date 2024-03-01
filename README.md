@@ -1,5 +1,5 @@
 # Challenge_TL
-## This repository is the final result of a challenge for a position as Tech Lead in .NET Tecnology for a software engineering company.
+## This repository is the final result of a challenge for a position as Tech Lead in .NET Technology for a software engineering company.
 
 > N5 company requests a Web API for registering user permissions, to carry out this task it is necessary to comply with the following steps:
 - [x] Create tables to manage employees , permission and permission types.
