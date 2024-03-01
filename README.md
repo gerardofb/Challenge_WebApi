@@ -29,7 +29,8 @@ The challenge was made for collaboration with the company contacted by @workana/
 ```
 docker-compose up --force-recreate --build
 ```
-> Then, for proper working of the api, you should seed the database using only once the .exe in the project ConsoleSeedChallenge_TL
+> [!TIP]
+> For proper working of the api, you should seed the database using only once the .exe in the project ConsoleSeedChallenge_TL
 > Lastly, navigate to http://localhost:6400/swagger/index.html and test the API. The project ConsoleConsumerTopics is just for checking the queues in kafka
 
 > [!IMPORTANT]
